@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,17 @@ public class LoanCalculationService {
         int loanTermMonths = loanRequestDTO.getLoanTermMonths();
         RepaymentType repaymentType = loanRequestDTO.getRepaymentType();
 
+        // 입력값 검증
+        if (loanAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("대출 금액은 0보다 커야 합니다.");
+        }
+        if (annualInterestRate.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("연이율은 0보다 커야 합니다.");
+        }
+        if (loanTermMonths <= 0) {
+            throw new IllegalArgumentException("대출 기간(개월)은 1 이상이어야 합니다.");
+        }
+
         List<BigDecimal> monthlyPayments = new ArrayList<>();
         BigDecimal totalInterest = BigDecimal.ZERO;
         BigDecimal totalPayment = BigDecimal.ZERO;
@@ -30,9 +42,10 @@ public class LoanCalculationService {
         switch (repaymentType) {
             case EQUAL_INSTALLMENT -> {
                 BigDecimal monthlyRate = annualInterestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP);
-                BigDecimal numerator = monthlyRate.multiply(loanAmount);
-                BigDecimal denominator = BigDecimal.ONE.subtract(BigDecimal.ONE.add(monthlyRate).pow(-loanTermMonths));
-                BigDecimal monthlyPayment = numerator.divide(denominator, 2, RoundingMode.HALF_UP);
+                BigDecimal powerFactor = BigDecimal.ONE.add(monthlyRate).pow(loanTermMonths, new MathContext(10));
+                BigDecimal denominator = BigDecimal.ONE.subtract(BigDecimal.ONE.divide(powerFactor, 10, RoundingMode.HALF_UP));
+
+                BigDecimal monthlyPayment = loanAmount.multiply(monthlyRate).divide(denominator, 2, RoundingMode.HALF_UP);
 
                 for (int i = 0; i < loanTermMonths; i++) {
                     monthlyPayments.add(monthlyPayment);

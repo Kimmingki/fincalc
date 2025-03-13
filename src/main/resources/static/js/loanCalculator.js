@@ -30,7 +30,7 @@ $(document).ready(function() {
             success: function(response) {
                 setTimeout(() => {
                     displayResult(response);
-                    $("#resultContainer").fadeIn(400); // 부드러운 효과
+                    $("#resultContainer").removeClass("d-none").fadeIn(400); // 부드러운 효과
                 }, 300);
             },
             error: function(xhr) {
