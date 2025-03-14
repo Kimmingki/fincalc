@@ -46,6 +46,7 @@ public class LoanCalculationService {
                 BigDecimal denominator = BigDecimal.ONE.subtract(BigDecimal.ONE.divide(powerFactor, 10, RoundingMode.HALF_UP));
 
                 BigDecimal monthlyPayment = loanAmount.multiply(monthlyRate).divide(denominator, 2, RoundingMode.HALF_UP);
+                monthlyPayment = monthlyPayment.setScale(0, RoundingMode.HALF_UP);
 
                 for (int i = 0; i < loanTermMonths; i++) {
                     monthlyPayments.add(monthlyPayment);
@@ -61,6 +62,8 @@ public class LoanCalculationService {
                 for (int i = 0; i < loanTermMonths; i++) {
                     BigDecimal monthlyInterest = remainingLoan.multiply(annualInterestRate).divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
                     BigDecimal monthlyPayment = monthlyPrincipal.add(monthlyInterest);
+                    monthlyPayment = monthlyPayment.setScale(0, RoundingMode.HALF_UP);
+
                     monthlyPayments.add(monthlyPayment);
                     remainingLoan = remainingLoan.subtract(monthlyPrincipal);
                     totalInterest = totalInterest.add(monthlyInterest);
@@ -70,6 +73,8 @@ public class LoanCalculationService {
             }
             case BULLET_PAYMENT -> {
                 BigDecimal monthlyInterest = loanAmount.multiply(annualInterestRate).divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
+                monthlyInterest = monthlyInterest.setScale(0, RoundingMode.HALF_UP);
+
                 for (int i = 0; i < loanTermMonths; i++) {
                     monthlyPayments.add(monthlyInterest);
                     totalInterest = totalInterest.add(monthlyInterest);
@@ -77,6 +82,10 @@ public class LoanCalculationService {
                 totalPayment = loanAmount.add(totalInterest);
             }
         }
+
+        // 총 이자, 총 상환 금액 정수 변환
+        totalInterest = totalInterest.setScale(0, RoundingMode.HALF_UP);
+        totalPayment = totalPayment.setScale(0, RoundingMode.HALF_UP);
 
         return new LoanResponseDTO(monthlyPayments, totalInterest, totalPayment);
     }

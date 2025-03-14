@@ -1,18 +1,38 @@
 $(document).ready(function() {
-    // 대출 금액 입력 시 실시간으로 포맷된 값을 표시
+    // 대출 금액 입력 시 실시간으로 label 업데이트
     $("#loanAmount").on("input", function() {
-        let rawValue = $(this).val().replace(/[^0-9]/g, ""); // 숫자 이외의 문자 제거
+        let rawValue = $(this).val().replace(/[^0-9]/g, "");
         let formattedValue = formatNumberWithCommas(rawValue);
-        $("#formattedAmount").text(formattedValue + "원"); // 변환된 값 표시
+        // label 업데이트
+        $("#loanAmountLabel").text("대출 금액 (원): " + formattedValue + "원");
+        // 기존 별도 표시 영역도 업데이트 (필요시)
+        $("#formattedAmount").text(formattedValue + " 원");
     });
 
-    // 빠른 입력 버튼 클릭 시 기존 값에 추가
-    $(".quick-btn").click(function() {
-        let valueToAdd = parseFloat($(this).data("value")); // 버튼 값 (숫자로 변환)
-        let inputField = $(this).closest(".mb-3").find("input"); // 해당 버튼이 속한 입력 필드 찾기
-        let currentValue = parseFloat(inputField.val()) || 0; // 현재 입력값 (비어있으면 0)
+    // 연이율 입력 시 label 업데이트 (소수점 포함)
+    $("#annualInterestRate").on("input", function() {
+        let rawValue = $(this).val().replace(/[^0-9\.]/g, "");
+        let num = parseFloat(rawValue);
+        if (isNaN(num)) num = 0;
+        // 소수점 두자리로 고정
+        let formattedValue = num.toFixed(2);
+        $("#annualInterestRateLabel").text("연이율 (%): " + formattedValue + "%");
+    });
 
-        let newValue = currentValue + valueToAdd
+    // 대출 기간 입력 시 label 업데이트 (정수)
+    $("#loanTermMonths").on("input", function() {
+        let rawValue = $(this).val().replace(/[^0-9]/g, "");
+        let formattedValue = parseInt(rawValue) || 0;
+        $("#loanTermMonthsLabel").text("대출 기간 (개월): " + formattedValue + "개월");
+    });
+
+    // 퀵 버튼 클릭 시 해당 input 필드에 값 추가 및 label 업데이트
+    $(".quick-btn").click(function() {
+        let valueToAdd = parseInt($(this).data("value"), 10);
+        // 버튼이 속한 부모 .mb-3 내의 첫 번째 input 요소를 찾음
+        let inputField = $(this).closest(".mb-3").find("input").first();
+        let currentValue = parseInt(inputField.val().replace(/[^0-9]/g, ""), 10) || 0;
+        let newValue = Math.floor(currentValue + valueToAdd);
         inputField.val(newValue).trigger("input");
     });
 
@@ -32,35 +52,30 @@ $(document).ready(function() {
             url: "/api/loan/calculate",
             contentType: "application/json",
             data: JSON.stringify(formData),
-            beforeSend: function() {
-                $("#resultContainer").fadeOut(200); // 결과 숨기기
-            },
             success: function(response) {
-                setTimeout(() => {
-                    displayResult(response);
-                    $("#resultContainer").removeClass("d-none").fadeIn(400); // 부드러운 효과
-                }, 300);
+                displayResult(response);
+                $("#resultContainer").removeClass("d-none");
             },
             error: function(xhr) {
-                console.error("Error:", xhr.responseText);
+                console.error("에러 발생:", xhr.responseText);
             }
         });
     });
 });
 
-// 계산 결과 출력 함수
+// 계산 결과를 화면에 표시하는 함수
 function displayResult(data) {
-    $("#totalInterest").text(data.totalInterest.toLocaleString() + " 원");
-    $("#totalPayment").text(data.totalPayment.toLocaleString() + " 원");
+    $("#totalInterest").text(formatNumberWithCommas(data.totalInterest) + " 원");
+    $("#totalPayment").text(formatNumberWithCommas(data.totalPayment) + " 원");
 
     let monthlyList = $("#monthlyPayments");
     monthlyList.empty();
     $.each(data.monthlyPayments, function(index, payment) {
-        monthlyList.append(`<li class="list-group-item">${index + 1}개월차: ${payment.toLocaleString()} 원</li>`);
+        monthlyList.append(`<li class="list-group-item">${index + 1}개월차: ${formatNumberWithCommas(payment)} 원</li>`);
     });
 }
 
-// 숫자를 금액 형식(콤마 포함)으로 변환하는 함수
+// 숫자를 금액 형식(콤마 포함)으로 변환하는 함수 (정수 처리)
 function formatNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return Math.floor(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
