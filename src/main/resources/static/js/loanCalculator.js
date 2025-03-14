@@ -5,8 +5,6 @@ $(document).ready(function() {
         let formattedValue = formatNumberWithCommas(rawValue);
         // label 업데이트
         $("#loanAmountLabel").text("대출 금액 (원): " + formattedValue + "원");
-        // 기존 별도 표시 영역도 업데이트 (필요시)
-        $("#formattedAmount").text(formattedValue + " 원");
     });
 
     // 연이율 입력 시 label 업데이트 (소수점 포함)
@@ -65,13 +63,13 @@ $(document).ready(function() {
 
 // 계산 결과를 화면에 표시하는 함수
 function displayResult(data) {
-    $("#totalInterest").text(formatNumberWithCommas(data.totalInterest) + " 원");
-    $("#totalPayment").text(formatNumberWithCommas(data.totalPayment) + " 원");
+    $("#totalInterest").text(formatNumberWithCommas(data.totalInterest) + "원");
+    $("#totalPayment").text(formatNumberWithCommas(data.totalPayment) + "원");
 
     let monthlyList = $("#monthlyPayments");
     monthlyList.empty();
     $.each(data.monthlyPayments, function(index, payment) {
-        monthlyList.append(`<li class="list-group-item">${index + 1}개월차: ${formatNumberWithCommas(payment)} 원</li>`);
+        monthlyList.append(`<li class="list-group-item">${index + 1}개월차: ${formatNumberWithCommas(payment)}원</li>`);
     });
 }
 
