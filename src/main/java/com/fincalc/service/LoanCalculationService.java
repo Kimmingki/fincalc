@@ -41,12 +41,7 @@ public class LoanCalculationService {
 
         switch (repaymentType) {
             case EQUAL_INSTALLMENT -> {
-                BigDecimal monthlyRate = annualInterestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP);
-                BigDecimal powerFactor = BigDecimal.ONE.add(monthlyRate).pow(loanTermMonths, new MathContext(10));
-                BigDecimal denominator = BigDecimal.ONE.subtract(BigDecimal.ONE.divide(powerFactor, 10, RoundingMode.HALF_UP));
-
-                BigDecimal monthlyPayment = loanAmount.multiply(monthlyRate).divide(denominator, 2, RoundingMode.HALF_UP);
-                monthlyPayment = monthlyPayment.setScale(0, RoundingMode.HALF_UP);
+                BigDecimal monthlyPayment = getBigDecimal(annualInterestRate, loanTermMonths, loanAmount);
 
                 for (int i = 0; i < loanTermMonths; i++) {
                     monthlyPayments.add(monthlyPayment);
@@ -88,5 +83,15 @@ public class LoanCalculationService {
         totalPayment = totalPayment.setScale(0, RoundingMode.HALF_UP);
 
         return new LoanResponseDTO(monthlyPayments, totalInterest, totalPayment);
+    }
+
+    private static BigDecimal getBigDecimal(BigDecimal annualInterestRate, int loanTermMonths, BigDecimal loanAmount) {
+        BigDecimal monthlyRate = annualInterestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP);
+        BigDecimal powerFactor = BigDecimal.ONE.add(monthlyRate).pow(loanTermMonths, new MathContext(10));
+        BigDecimal denominator = BigDecimal.ONE.subtract(BigDecimal.ONE.divide(powerFactor, 10, RoundingMode.HALF_UP));
+
+        BigDecimal monthlyPayment = loanAmount.multiply(monthlyRate).divide(denominator, 2, RoundingMode.HALF_UP);
+        monthlyPayment = monthlyPayment.setScale(0, RoundingMode.HALF_UP);
+        return monthlyPayment;
     }
 }
