@@ -1,4 +1,4 @@
-package com.fincalc.dto;
+package com.fincalc.dto.loan;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

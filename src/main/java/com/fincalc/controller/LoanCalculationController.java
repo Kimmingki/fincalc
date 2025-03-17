@@ -1,7 +1,7 @@
 package com.fincalc.controller;
 
-import com.fincalc.dto.LoanRequestDTO;
-import com.fincalc.dto.LoanResponseDTO;
+import com.fincalc.dto.loan.LoanRequestDTO;
+import com.fincalc.dto.loan.LoanResponseDTO;
 import com.fincalc.service.LoanCalculationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

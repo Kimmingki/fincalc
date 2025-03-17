@@ -1,7 +1,7 @@
 package com.fincalc.service;
 
-import com.fincalc.dto.LoanRequestDTO;
-import com.fincalc.dto.LoanResponseDTO;
+import com.fincalc.dto.loan.LoanRequestDTO;
+import com.fincalc.dto.loan.LoanResponseDTO;
 import com.fincalc.model.RepaymentType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
