@@ -1,5 +1,6 @@
 /* 컨테이너 스타일 */
-.calculator-container {
+.calculator-container,
+.deposit-container {
     padding: 20px;
 }
 
@@ -11,6 +12,7 @@
 }
 
 .calculator-card,
+.deposit-card,
 .result-card {
     width: 500px;
     transform: none;
