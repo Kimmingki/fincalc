@@ -13,6 +13,7 @@
 
 .calculator-card,
 .deposit-card,
+.saving-card,
 .result-card {
     width: 500px;
     transform: none;
