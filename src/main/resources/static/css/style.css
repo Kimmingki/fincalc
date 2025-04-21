@@ -1,6 +1,7 @@
 /* 컨테이너 스타일 */
 .calculator-container,
-.deposit-container {
+.deposit-container,
+.saving-container {
     padding: 20px;
 }
 

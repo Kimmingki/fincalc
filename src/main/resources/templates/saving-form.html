@@ -3,64 +3,65 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 <head>
-    <title>적금 계산기</title>
 </head>
 <body>
 <main layout:fragment="content">
-    <div class="saving-container" style="max-width: 500px; margin: auto; padding: 20px;">
+    <div class="saving-container d-flex flex-column align-items-center">
         <h2 class="text-center">적금 계산기</h2>
-        <div class="card shadow-sm p-4 saving-card">
-            <form id="savingForm">
-                <!-- 매월 납입액 -->
-                <div class="mb-3">
-                    <label class="form-label" id="monthlyDepositLabel">매월 납입액 (원):</label>
-                    <input type="number" class="form-control" name="monthlyDeposit" id="monthlyDeposit" required>
-                    <div id="depositFormattedAmount" class="text-muted mt-1"></div>
-                    <div class="quick-input mt-2">
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="100000">10만</button>
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="200000">20만</button>
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="300000">30만</button>
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="500000">50만</button>
+        <div class="cards-container d-flex flex-column flex-md-row justify-content-center align-items-start gap-3">
+            <div class="card shadow-sm p-4 saving-card">
+                <form id="savingForm">
+                    <!-- 매월 납입액 -->
+                    <div class="mb-3">
+                        <label class="form-label" id="monthlyDepositLabel">매월 납입액 (원):</label>
+                        <input type="number" class="form-control" name="monthlyDeposit" id="monthlyDeposit" required>
+                        <div id="depositFormattedAmount" class="text-muted mt-1"></div>
+                        <div class="quick-input mt-2">
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="100000">10만</button>
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="200000">20만</button>
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="300000">30만</button>
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="500000">50만</button>
+                        </div>
                     </div>
-                </div>
-                <!-- 연이율 -->
-                <div class="mb-3">
-                    <label class="form-label" id="annualInterestRateLabel">연이율 (%):</label>
-                    <input type="number" step="0.01" class="form-control" name="annualInterestRate" id="annualInterestRate" required>
-                    <div class="quick-input mt-2">
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="3.0">3%</button>
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="4.0">4%</button>
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="5.0">5%</button>
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="6.0">6%</button>
+                    <!-- 연이율 -->
+                    <div class="mb-3">
+                        <label class="form-label" id="annualInterestRateLabel">연이율 (%):</label>
+                        <input type="number" step="0.01" class="form-control" name="annualInterestRate" id="annualInterestRate" required>
+                        <div class="quick-input mt-2">
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="3.0">3%</button>
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="4.0">4%</button>
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="5.0">5%</button>
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="6.0">6%</button>
+                        </div>
                     </div>
-                </div>
-                <!-- 적금 기간 -->
-                <div class="mb-3">
-                    <label class="form-label" id="savingPeriodLabel">적금 기간 (개월):</label>
-                    <input type="number" class="form-control" name="savingPeriodMonths" id="savingPeriodMonths" required>
-                    <div class="quick-input mt-2">
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="12">12개월</button>
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="24">24개월</button>
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="36">36개월</button>
-                        <button type="button" class="btn btn-outline-secondary quick-btn" data-value="60">60개월</button>
+                    <!-- 적금 기간 -->
+                    <div class="mb-3">
+                        <label class="form-label" id="savingPeriodLabel">적금 기간 (개월):</label>
+                        <input type="number" class="form-control" name="savingPeriodMonths" id="savingPeriodMonths" required>
+                        <div class="quick-input mt-2">
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="12">12개월</button>
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="24">24개월</button>
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="36">36개월</button>
+                            <button type="button" class="btn btn-outline-secondary quick-btn" data-value="60">60개월</button>
+                        </div>
                     </div>
-                </div>
-                <!-- 이자 계산 방식 -->
-                <div class="mb-3">
-                    <label class="form-label">이자 계산 방식:</label>
-                    <select class="form-select" name="interestType" id="interestType" required>
-                        <option value="COMPOUND">복리</option>
-                        <option value="SIMPLE">단리</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">계산하기</button>
-            </form>
-        </div>
+                    <!-- 이자 계산 방식 -->
+                    <div class="mb-3">
+                        <label class="form-label">이자 계산 방식:</label>
+                        <select class="form-select" name="interestType" id="interestType" required>
+                            <option value="COMPOUND">복리</option>
+                            <option value="SIMPLE">단리</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">계산하기</button>
+                </form>
+            </div>
 
-        <div class="card shadow-sm p-4 result-card" id="savingResultContainer" style="display: none; margin-top: 20px;">
-            <h4>계산 결과</h4>
-            <p><strong>발생 이자:</strong> <span id="savingInterestEarned"></span></p>
-            <p><strong>만기 금액:</strong> <span id="savingFinalAmount"></span></p>
+            <div class="card shadow-sm p-4 result-card d-none mt-4 mt-md-0 ms-md-4" id="savingResultContainer">
+                <h4>계산 결과</h4>
+                <p><strong>발생 이자:</strong> <span id="savingInterestEarned"></span></p>
+                <p><strong>만기 금액:</strong> <span id="savingFinalAmount"></span></p>
+            </div>
         </div>
     </div>
 </main>

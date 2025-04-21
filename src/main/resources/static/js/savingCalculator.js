@@ -56,7 +56,7 @@ $(document).ready(function() {
             success: function(response) {
                 console.log("Saving 서버 응답 데이터:", response);
                 displaySavingResult(response);
-                $("#savingResultContainer").show();
+                $("#savingResultContainer").removeClass("d-none");
             },
             error: function(xhr) {
                 console.error("Saving 계산 에러:", xhr.responseText);

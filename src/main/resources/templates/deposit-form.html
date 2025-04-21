@@ -3,13 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 <head>
-    <title>예금 이자 계산기</title>
 </head>
 <body>
 <main layout:fragment="content">
-    <div class="deposit-container" style="max-width: 500px; margin: auto;">
+    <div class="deposit-container d-flex flex-column align-items-center">
         <h2 class="text-center">예금 이자 계산기</h2>
-        <div class="cards-container" style="flex-direction: column;">
+        <div class="cards-container d-flex flex-column flex-md-row justify-content-center align-items-start gap-3">
             <div class="card shadow-sm p-4 deposit-card">
                 <form id="depositForm">
                     <!-- 예금 금액 -->
@@ -58,7 +57,7 @@
                 </form>
             </div>
 
-            <div class="card shadow-sm p-4 result-card" id="depositResultContainer" style="display: none;">
+            <div class="card shadow-sm p-4 result-card mt-4 mt-md-0 ms-md-4" id="depositResultContainer" style="display: none;">
                 <h4>계산 결과</h4>
                 <p><strong>발생 이자:</strong> <span id="interestEarned"></span></p>
                 <p><strong>만기 금액:</strong> <span id="finalAmount"></span></p>
