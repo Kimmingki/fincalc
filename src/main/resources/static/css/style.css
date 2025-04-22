@@ -3,9 +3,13 @@
 .deposit-container,
 .saving-container {
     padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 .cards-container {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -16,7 +20,8 @@
 .deposit-card,
 .saving-card,
 .result-card {
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
     transform: none;
     opacity: 1;
 }
