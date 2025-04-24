@@ -56,6 +56,7 @@ $(document).ready(function() {
             success: function(response) {
                 console.log("Saving 서버 응답 데이터:", response);
                 displaySavingResult(response);
+                $(".saving-container").addClass("expanded");
                 $("#savingResultContainer").removeClass("d-none");
             },
             error: function(xhr) {

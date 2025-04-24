@@ -57,6 +57,7 @@ $(document).ready(function() {
             success: function(response) {
                 console.log("Deposit 서버 응답 데이터:", response);
                 displayDepositResult(response);
+                $(".deposit-container").addClass("expanded");
                 $("#depositResultContainer").removeClass("d-none");
             },
             error: function(xhr) {

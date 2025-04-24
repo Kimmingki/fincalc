@@ -52,6 +52,7 @@ $(document).ready(function() {
             data: JSON.stringify(formData),
             success: function(response) {
                 displayResult(response);
+                $(".calculator-container").addClass("expanded");
                 $("#resultContainer").removeClass("d-none");
             },
             error: function(xhr) {
