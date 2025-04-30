@@ -43,7 +43,8 @@ $(document).ready(function() {
             depositAmount: $("input[name='depositAmount']").val(),
             annualInterestRate: $("input[name='annualInterestRate']").val(),
             depositPeriod: $("input[name='depositPeriod']").val(),
-            interestType: $("select[name='interestType']").val()
+            interestType: $("select[name='interestType']").val(),
+            taxType: $("input[name='taxType']:checked").val()
         };
 
         $.ajax({
@@ -56,7 +57,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 console.log("Deposit 서버 응답 데이터:", response);
-                displayDepositResult(response);
+                displayDepositResult(response, formData.taxType);
                 $(".deposit-container").addClass("expanded");
                 $("#depositResultContainer").removeClass("d-none");
             },
@@ -71,7 +72,19 @@ function formatNumberWithCommas(number) {
     return Math.floor(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-function displayDepositResult(data) {
-    $("#interestEarned").text(formatNumberWithCommas(data.interestEarned) + " 원");
+function displayDepositResult(data, taxType) {
+    const interest = parseFloat(data.interestEarned);
+    let taxAmount = 0, netInterest = interest;
+
+    if (taxType === "taxable") {
+        taxAmount = interest * 0.154;               // 15.4% 세율 적용
+        netInterest = interest - taxAmount;
+    }
+
+    const netFinal = data.finalAmount - netInterest;
+
+    $("#interestEarned").text(formatNumberWithCommas(interest) + " 원");
     $("#finalAmount").text(formatNumberWithCommas(data.finalAmount) + " 원");
+    $("#netInterest").text(formatNumberWithCommas(netInterest.toFixed(0)) + " 원");
+    $("#netFinalAmount").text(formatNumberWithCommas(Math.floor(netFinal)) + " 원");
 }

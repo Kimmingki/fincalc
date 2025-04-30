@@ -42,7 +42,8 @@ $(document).ready(function() {
             monthlyDeposit: $("input[name='monthlyDeposit']").val(),
             annualInterestRate: $("input[name='annualInterestRate']").val(),
             savingPeriodMonths: $("input[name='savingPeriodMonths']").val(),
-            interestType: $("select[name='interestType']").val()
+            interestType: $("select[name='interestType']").val(),
+            taxType: $("input[name='taxType']:checked").val()
         };
 
         $.ajax({
@@ -55,7 +56,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 console.log("Saving 서버 응답 데이터:", response);
-                displaySavingResult(response);
+                displaySavingResult(response, formData.taxType);
                 $(".saving-container").addClass("expanded");
                 $("#savingResultContainer").removeClass("d-none");
             },
@@ -70,7 +71,27 @@ function formatNumberWithCommas(number) {
     return Math.floor(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-function displaySavingResult(data) {
-    $("#savingInterestEarned").text(formatNumberWithCommas(data.totalInterest) + " 원");
-    $("#savingFinalAmount").text(formatNumberWithCommas(data.finalAmount) + " 원");
+function displaySavingResult(data, taxType) {
+    const P = parseFloat($("input[name='monthlyDeposit']").val());
+    const n = parseInt($("input[name='savingPeriodMonths']").val(), 10);
+    const grossInterest = parseFloat(data.totalInterest);  // 세전 이자
+    const grossFinal = parseFloat(data.finalAmount);       // 세전 만기 금액
+
+    // 과세 계산
+    let taxAmount   = 0;
+    let netInterest = grossInterest;
+    if (taxType === "taxable") {
+        taxAmount   = grossInterest * 0.154;              // 15.4% 세율
+        netInterest = grossInterest - taxAmount;
+    }
+
+    // 세후 만기 금액 = 원금 총합 + 세후 이자
+    const principalTotal = P * n;
+    const netFinal = principalTotal + netInterest;
+
+    // 화면에 출력
+    $("#savingInterestEarned").text(formatNumberWithCommas(grossInterest) + " 원");
+    $("#savingFinalAmount").text(formatNumberWithCommas(grossFinal) + " 원");
+    $("#savingNetInterest").text(formatNumberWithCommas(Math.floor(netInterest)) + " 원");
+    $("#savingNetFinalAmount").text(formatNumberWithCommas(Math.floor(netFinal)) + " 원");
 }

@@ -53,14 +53,32 @@
                             <option value="COMPOUND">복리</option>
                         </select>
                     </div>
+
+                    <!-- 과세 여부 -->
+                    <div class="mb-3">
+                        <label class="form-label">과세 타입:</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="taxType" id="taxable" value="taxable" checked>
+                                <label class="form-check-label" for="taxable">과세</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="taxType" id="taxExempt" value="exempt">
+                                <label class="form-check-label" for="taxExempt">비과세</label>
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn btn-primary w-100">계산하기</button>
                 </form>
             </div>
 
             <div class="card shadow-sm p-4 result-card d-none mt-4 mt-md-0 ms-md-4" id="depositResultContainer">
                 <h4>계산 결과</h4>
-                <p><strong>발생 이자:</strong> <span id="interestEarned"></span></p>
-                <p><strong>만기 금액:</strong> <span id="finalAmount"></span></p>
+                <p><strong>이자 (세전):</strong> <span id="interestEarned"></span></p>
+                <p><strong>이자 (세후):</strong> <span id="netInterest"></span></p>
+                <p><strong>만기 금액 (세전):</strong> <span id="finalAmount"></span></p>
+                <p><strong>만기 금액 (세후):</strong> <span id="netFinalAmount"></span></p>
             </div>
         </div>
     </div>
